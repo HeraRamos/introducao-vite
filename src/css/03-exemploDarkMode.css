@@ -1,0 +1,134 @@
+/*
+Para implementar Dark Mode mantendo a arquitetura de variáveis CSS no Vite, basta redefinir os tokens de cor sob a classe [data-theme="dark"] e gerenciar a troca no React persistindo no localStorage.
+
+1. Atualizar o CSS Global (global.css)
+Adicione o bloco de tema escuro e a consulta automática do sistema operacional:
+*/
+
+/* ==========================================================================
+   TEMA CLARO (Padrão)
+   ========================================================================== */
+:root {
+  --color-primary: #646cff;
+  --color-primary-hover: #535bf2;
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-text-primary: #212121;
+  --color-text-secondary: #666666;
+  --color-border: #e0e0e0;
+  --color-border-focus: #646cff;
+  --color-table-header: #f4f4f4;
+}
+
+/* ==========================================================================
+   TEMA ESCURO (Manual via atributo data-theme)
+   ========================================================================== */
+[data-theme="dark"] {
+  --color-primary: #7c83fd;
+  --color-primary-hover: #969bff;
+  --color-bg: #121212;
+  --color-surface: #1e1e1e;
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #a0a0a0;
+  --color-border: #333333;
+  --color-border-focus: #7c83fd;
+  --color-table-header: #2a2a2a;
+}
+
+/* ==========================================================================
+   PREFERÊNCIA AUTOMÁTICA DO SISTEMA (Fallback)
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-primary: #7c83fd;
+    --color-primary-hover: #969bff;
+    --color-bg: #121212;
+    --color-surface: #1e1e1e;
+    --color-text-primary: #f5f5f5;
+    --color-text-secondary: #a0a0a0;
+    --color-border: #333333;
+    --color-border-focus: #7c83fd;
+    --color-table-header: #2a2a2a;
+  }
+}
+
+/*
+2. Criar um Hook para Gerenciar o Tema (useTheme.js)
+Crie o arquivo src/hooks/useTheme.js para sincronizar o estado no DOM e no armazenamento local:
+*/
+
+/*
+
+import { useState, useEffect } from "react";
+
+export function useTheme() {
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) return savedTheme;
+
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return prefersDark ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  };
+
+  return { theme, toggleTheme };
+}
+
+*/
+
+/*
+3. Componente de Alternância (ThemeToggle.jsx)
+Crie um botão para alternar o tema usando o hook:
+*/
+
+/*
+import React from "react";
+import { useTheme } from "./hooks/useTheme";
+
+export function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button onClick={toggleTheme} type="button">
+      {theme === "light" ? "🌙 Modo Escuro" : "☀️ Modo Claro"}
+    </button>
+  );
+}
+*/
+
+/*
+4. Evitar Flash de Conteúdo Incorreto (FOUC)
+Adicione um script inline no <head> do seu index.html para aplicar o tema antes da renderização do React:
+*/
+
+/*
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meu Projeto</title>
+    <script>
+      (function () {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = savedTheme || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+*/
+

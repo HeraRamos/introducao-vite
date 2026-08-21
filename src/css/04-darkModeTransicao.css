@@ -1,0 +1,88 @@
+/*
+Para criar uma troca de tema suave sem causar lentidão ou animações indesejadas durante o carregamento da página, o segredo é aplicar uma transição rápida apenas nas propriedades de cor essenciais (background-color, color, border-color).
+
+1. Adicionar Transição Global Controlada (global.css)
+Evite usar transition: all no seletor curinga *, pois isso sobrecarrega a GPU e anima dimensões desnecessariamente. Aplique diretamente nos elementos-chave ou via tokens:
+*/
+
+:root {
+  /* Token de transição para troca de tema */
+  --transition-theme: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, fill 0.3s ease;
+}
+
+/* Aplicação da transição no body e superfícies principais */
+body {
+  font-family: var(--font-family-base);
+  font-size: 1.6rem;
+  line-height: var(--line-height-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  transition: var(--transition-theme);
+}
+
+/* Transição para containers, inputs, botões e tabelas */
+input,
+select,
+textarea,
+button,
+table,
+th,
+td,
+.containerVertical,
+.containerHorizontal {
+  transition: var(--transition-theme);
+}
+
+/*
+2. Evitar o Flash de Animação no Carregamento Inicial
+Se a página carregar no modo escuro, o navegador pode tentar animar do branco para o preto ao inicializar. Para impedir isso, desative temporariamente as transições adicionando uma classe transitória:
+
+No index.html (script inline do <head>):
+*/
+
+/*
+<script>
+  (function () {
+    // 1. Bloqueia transições antes do primeiro render
+    document.documentElement.classList.add("preload");
+
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const theme = savedTheme || (prefersDark ? "dark" : "light");
+    
+    document.documentElement.setAttribute("data-theme", theme);
+
+    // 2. Remove o bloqueio logo após o HTML carregar
+    window.addEventListener("DOMContentLoaded", () => {
+      document.documentElement.classList.remove("preload");
+    });
+  })();
+</script>
+*/
+
+/* 
+No global.css:
+*/
+
+/* Desativa qualquer transição enquanto a página está carregando */
+.preload,
+.preload * {
+  transition: none !important;
+}
+
+/*
+3. Usando nos CSS Modules
+Para componentes isolados em .module.css (como cards, modais e sidebars), basta reaproveitar a variável global de transição:
+*/
+
+/* Card.module.css */
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: var(--transition-theme);
+}

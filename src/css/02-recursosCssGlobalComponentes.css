@@ -1,0 +1,112 @@
+/*
+Para consumir os recursos do seu CSS global nos componentes em um projeto Vite com CSS Modules, existem 4 estratégias principais que você pode combinar:
+
+1. Consumindo Variáveis Globais (Design Tokens)
+As variáveis CSS declaradas no :root do global.css ficam disponíveis em qualquer arquivo .module.css sem necessidade de import adicional.
+
+Card.module.css
+*/
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  color: var(--color-text-primary);
+  transition: var(--transition-theme);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+/*
+2. Combinando Classes Utilitárias Globais com Locais
+Classes utilitárias como .containerVertical ou .containerHorizontal podem ser aplicadas como strings normais no className, combinadas com as classes geradas pelo módulo.
+
+UserProfile.jsx
+*/
+
+/*
+import React from 'react';
+import styles from './UserProfile.module.css';
+
+export function UserProfile({ name, role }) {
+  return (    
+    <div className={`containerVertical ${styles.profileCard}`}>
+      <h2 className={styles.name}>{name}</h2>
+      <small>{role}</small>
+    </div>
+  );
+}
+*/
+
+/*
+3. Usando a Diretiva :global() dentro do CSS Module
+Quando você precisa aplicar estilos a um elemento gerado externamente ou estilizar classes globais dentro do escopo do módulo, use a pseudo-classe :global().
+
+DataTable.module.css
+*/
+
+/* Estiliza o container do módulo */
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-md);
+}
+
+/* Modifica diretamente as tags globais 'table' e 'th' apenas dentro desse wrapper */
+.tableWrapper :global(table) {
+  margin: 0;
+}
+
+.tableWrapper :global(th) {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+/*
+4. Herança de Variantes e Composição com composes
+O CSS Modules permite compor regras de classes já existentes usando a palavra-chave composes.
+
+Button.module.css
+*/
+
+.baseButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 1rem 1.6rem;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: var(--transition-theme);
+}
+
+.primary {
+  composes: baseButton;
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.outline {
+  composes: baseButton;
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+

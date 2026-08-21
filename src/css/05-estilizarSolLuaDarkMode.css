@@ -1,0 +1,173 @@
+/*
+Para criar um botão de alternância de tema (Theme Toggle) com uma transição suave entre um ícone de Sol (Light Mode) e um ícone de Lua (Dark Mode) usando React, CSS Modules e SVG, a abordagem mais moderna e acessível é usar a técnica de "Overlapping Icons" (Ícones Sobrepostos).
+
+Em vez de trocar um elemento por outro, sobrepomos os dois ícones e usamos CSS para animar a opacidade, rotação e escala deles simultaneamente. Isso cria um efeito de fusão ("morphing effect") agradável.
+
+Passo 1: Obter os SVGs
+Você precisará de dois ícones simples em formato SVG. Você pode baixá-los gratuitamente de sites como Heroicons, Lucide, ou FontAwesome. Garanta que ambos tenham as mesmas dimensões padrão (ex: viewBox="0 0 24 24").
+
+Passo 2: Criar o Componente React (ThemeToggle.jsx)
+Este componente usa o hook useTheme criado na etapa anterior (que gerencia o estado theme e a função toggleTheme no localStorage).
+*/
+
+/*
+// src/components/ThemeToggle.jsx
+import React from 'react';
+import { useTheme } from '../hooks/useTheme'; // Hook criado anteriormente
+import styles from './ThemeToggle.module.css';
+
+export function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
+
+  return (
+    <button
+      onClick={toggleTheme}
+      type="button"
+      className={styles.toggleButton}
+      // ARIA para acessibilidade
+      aria-label={isDark ? 'Ativar modo claro' : 'Ativar modo escuro'}
+      aria-pressed={isDark}
+    >
+      <div className={styles.iconContainer}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className={`${styles.icon} ${styles.sunIcon}`}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 21v2.25m-6.364-.386l1.591-1.591M3 12h2.25m.386-6.364l1.591 1.591M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+          />
+        </svg>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className={`${styles.icon} ${styles.moonIcon}`}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
+          />
+        </svg>
+      </div>
+    </button>
+  );
+}
+*/
+
+/*
+Passo 3: Estilizar com CSS Modules e Transições (ThemeToggle.module.css)
+Este arquivo CSS controla a sobreposição e a animação. Usamos o atributo data-theme aplicado no <html> (pelo hook useTheme) para acionar as mudanças.
+*/
+
+/* src/components/ThemeToggle.module.css */
+
+.toggleButton {
+  /* Reseta estilos padrão do botão */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  
+  /* Centraliza o container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Dimensões do botão */
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--radius-md); /* Usando variável do global.css */
+  
+  /* Transição opcional de hover no botão */
+  transition: background-color var(--transition-fast);
+}
+
+.toggleButton:hover {
+  background-color: var(--color-surface);
+}
+
+.toggleButton:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-border-focus);
+}
+
+/* Container relativo para sobrepor os SVGs */
+.iconContainer {
+  position: relative;
+  width: 2.4rem; /* Dimensão dos ícones */
+  height: 2.4rem;
+}
+
+/* Estilo base comum para ambos os ícones */
+.icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  
+  /* Define a cor base do ícone (pega a cor do texto do tema atual) */
+  color: var(--color-text-primary); 
+  
+  /* Transição suave de todas as propriedades de transformação e opacidade */
+  transition: 
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color var(--transition-fast); /* Cor troca com o tema geral */
+  
+  /* Garante que o ponto de origem da animação é o centro */
+  transform-origin: center center;
+}
+
+/* ==========================================================================
+   Animação do Modo Claro (Traz Sol, Esconde Lua)
+   ========================================================================== */
+:root[data-theme="light"] .sunIcon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+:root[data-theme="light"] .moonIcon {
+  opacity: 0;
+  /* Esconde a lua escalando para baixo e girando */
+  transform: scale(0) rotate(-90deg);
+}
+
+/* ==========================================================================
+   Animação do Modo Escuro (Traz Lua, Esconde Sol)
+   ========================================================================== */
+:root[data-theme="dark"] .sunIcon {
+  opacity: 0;
+  /* Esconde o sol escalando para cima e girando */
+  transform: scale(0) rotate(90deg);
+}
+
+:root[data-theme="dark"] .moonIcon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/*
+Explicação da Animação
+position: absolute: Ambos os SVGs ocupam o mesmo espaço exato dentro do .iconContainer.
+
+transition: Aplicada nas propriedades transform e opacity. Usamos cubic-bezier para uma sensação mais natural do que um simples linear.
+
+:root[data-theme="..."]: Quando o React muda o atributo data-theme no html, o CSS reage:
+
+No Modo Claro, o Sol (.sunIcon) vai para opacity: 1 e scale(1), enquanto a Lua (.moonIcon) vai para opacity: 0 e scale(0).
+
+No Modo Escuro, os estados se invertem. A rotação (rotate) adiciona um efeito de "giro" durante a fusão.
+*/
