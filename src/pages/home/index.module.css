@@ -1,6 +1,20 @@
 
-.containerHome {
+.cardHome {
+    display: flex; 
+    align-items: center;
+    justify-content: center;
     border: solid 2px #f00;
-    width: 100%;
-    /* max-width: 1240px; */
+    border-radius: 2rem;
+    width: 30%;
+    height: 10rem;
+    margin: 0 4rem;
+    font-size: 3rem;
+    color: #f00;
+    transition: background-color 0.6s ease, transform 0.4s ease;
+}
+
+.cardHome:hover {
+    background-color: #f00;
+    color: #fafafa;
+    transform: scale(1.05);
 }

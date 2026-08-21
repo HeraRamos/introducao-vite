@@ -1,0 +1,29 @@
+.cardExemplos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.6rem; 
+  padding: 1.6rem;
+}
+
+/* O React Router transforma o <Link> em uma tag <a> no HTML */
+.cardExemplos a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 10rem;
+  background-color: #FFAB91;
+  border: 0.4rem solid #FF5722;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  text-decoration: none;
+  color: #FF5722;
+  font-weight: 600;
+  box-shadow: 0 0.1rem 0.3rem rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.cardExemplos a:hover {
+  border-color: #FFAB91;
+  transform: translateY(-0.4rem);
+  box-shadow: 0 1rem 1.5rem -0.3rem rgba(59, 130, 246, 0.1), 0 4px 6px -2px rgba(59, 130, 246, 0.05);
+}

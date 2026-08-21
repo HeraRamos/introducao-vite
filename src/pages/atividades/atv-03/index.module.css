@@ -1,0 +1,13 @@
+/*
+ * @file   src\pages\atividades\atv-03\index.module.css
+ * @author Ewerton
+ * @date   2026-04-14
+ * @desc   [Descrição da folha de estilos]
+ */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    text-align: 'center';
+    margin-top: '50px';
+}

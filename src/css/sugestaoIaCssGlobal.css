@@ -1,0 +1,253 @@
+/* ==========================================================================
+   1. DESIGN TOKENS & VARIÁVEIS GLOBAIS
+   ========================================================================== */
+:root {
+    /* Paleta de Cores */
+    --color-primary: #646cff;
+    --color-primary-hover: #535bf2;
+    --color-bg: #fafafa;
+    --color-surface: #ffffff;
+    --color-text-primary: #212121;
+    --color-text-secondary: #666666;
+    --color-border: #e0e0e0;
+    --color-border-focus: #646cff;
+    --color-table-header: #f4f4f4;
+
+    /* Tipografia */
+    --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --line-height-tight: 1.2;
+    --line-height-base: 1.5;
+
+    /* Espaçamentos */
+    --spacing-xs: 0.4rem;
+    --spacing-sm: 0.8rem;
+    --spacing-md: 1.6rem;
+    --spacing-lg: 2.4rem;
+    --spacing-xl: 3.2rem;
+
+    /* Bordas e Raios */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+
+    /* Transições */
+    --transition-fast: 0.2s ease-in-out;
+}
+
+/* ==========================================================================
+   2. RESET & BASE
+   ========================================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 62.5%;
+    /* 1rem = 10px */
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-family-base);
+    font-size: 1.6rem;
+    /* 16px padrão */
+    line-height: var(--line-height-base);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg);
+    min-height: 100vh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: var(--spacing-md);
+}
+
+/* ==========================================================================
+   3. TIPOGRAFIA SEMÂNTICA
+   ========================================================================== */
+h1,
+h2,
+h3,
+h4 {
+    color: var(--color-text-primary);
+    line-height: var(--line-height-tight);
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 3.2rem;
+    margin-bottom: var(--spacing-md);
+}
+
+h2 {
+    font-size: 2.4rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+h3 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+p {
+    font-size: 1.6rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+label {
+    display: inline-block;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+}
+
+small {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 1.6rem;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    text-decoration: underline;
+    color: var(--color-primary-hover);
+}
+
+/* ==========================================================================
+   4. FORMULÁRIOS & ELEMENTOS INTERATIVOS
+   ========================================================================== */
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 1.6rem;
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.2);
+}
+
+button {
+    font-family: inherit;
+    font-size: 1.6rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+button:hover {
+    background-color: var(--color-primary-hover);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* ==========================================================================
+   5. TABELAS
+   ========================================================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-md) 0;
+    background-color: var(--color-surface);
+}
+
+th,
+td {
+    border: 1px solid var(--color-border);
+    padding: 1.2rem;
+    text-align: left;
+    font-size: 1.4rem;
+}
+
+th {
+    background-color: var(--color-table-header);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   6. UTILITÁRIOS GLOBAIS
+   ========================================================================== */
+.containerVertical {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+}
+
+.containerHorizontal {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 1200px;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+/* ==========================================================================
+   7. RESPONSIVIDADE PONTUAL
+   ========================================================================== */
+@media (max-width: 768px) {
+    .containerHorizontal {
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: 2.6rem;
+    }
+
+    h2 {
+        font-size: 2.1rem;
+    }
+}
+
+
+/*
+Como consumir nos CSS Modules
+Dentro de qualquer arquivo como index.module.css, basta usar as variáveis globais diretamente:
+*/
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+}
